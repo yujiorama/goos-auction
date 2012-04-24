@@ -1,19 +1,21 @@
 package com.github.yujiorama.auctionsinper;
 
-public class AuctionSniperDriver {
+import static org.hamcrest.CoreMatchers.equalTo;
 
-	public AuctionSniperDriver(int itemId) {
-		// TODO 自動生成されたコンストラクター・スタブ
+import com.objogate.wl.swing.AWTEventQueueProber;
+import com.objogate.wl.swing.driver.JFrameDriver;
+import com.objogate.wl.swing.driver.JLabelDriver;
+import com.objogate.wl.swing.gesture.GesturePerformer;
+
+public class AuctionSniperDriver extends JFrameDriver {
+
+	public AuctionSniperDriver(long timeoutMillis) {
+		super(new GesturePerformer(),
+				JFrameDriver.topLevelFrame(named(Main.MAIN_WINDOW_NAME), showingOnScreen()),
+				new AWTEventQueueProber(timeoutMillis, 100));
 	}
 
-	public void showSniperStatus(AuctionStatus joining) {
-		// TODO 自動生成されたメソッド・スタブ
-		
+	public void showSniperStatus(AuctionStatus auctionStatus) {
+		new JLabelDriver(this, named(Main.MAIN_WINDOW_NAME)).hasText(equalTo(auctionStatus.toString()));
 	}
-
-	public void dispose() {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-
 }
