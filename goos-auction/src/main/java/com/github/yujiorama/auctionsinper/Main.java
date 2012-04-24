@@ -12,8 +12,7 @@ public class Main {
 
 	}
 
-	public static void main(String xmpphostName, String sniperId, String sniperPassword,
-			String itemId) {
+	public static void main(String xmpphostName, String sniperId, String sniperPassword, String itemId) throws Exception {
 		main(new String[]{xmpphostName, sniperId, sniperPassword, itemId});
 	}
 
