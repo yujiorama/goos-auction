@@ -16,7 +16,7 @@ import org.jivesoftware.smack.packet.Message;
 
 public class FakeAuctionServer {
 
-	private static final String XMPP_HOSTNAME = "localhost";
+	public static final String XMPP_HOSTNAME = "localhost";
 	private static final String ITEM_ID_AS_LOGIN = "auction-%d";
 	private static final String AUCTION_PASSWORD = "auction";
 	private static final String AUCTION_RESOURCE = "Auction";
