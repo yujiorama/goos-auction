@@ -12,4 +12,9 @@ public class Main {
 
 	}
 
+	public static void main(String xmpphostName, String sniperId, String sniperPassword,
+			String itemId) {
+		main(new String[]{xmpphostName, sniperId, sniperPassword, itemId});
+	}
+
 }

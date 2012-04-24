@@ -9,7 +9,7 @@ public class ApplicationRunner {
 		Thread thread = new Thread("Test Application") {
 			@Override
 			public void run() {
-				// TODO 自動生成されたメソッド・スタブ
+				Main.main("localhost", "sniper", "sniper", auction.getItemId());
 			}
 		};
 		thread.setDaemon(on);
