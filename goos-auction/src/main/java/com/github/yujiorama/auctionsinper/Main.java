@@ -1,19 +1,31 @@
 package com.github.yujiorama.auctionsinper;
 
+import javax.swing.SwingUtilities;
+
 public class Main {
 
-	public static final String MAIN_WINDOW_NAME = "auction-sniper";
+	private MainWindow ui;
+	
+	public Main() throws Exception {
+		startUserInterface();
+	}
+	
+	private void startUserInterface() throws Exception {
+		SwingUtilities.invokeAndWait(
+				new Runnable() {
 
+					@Override
+					public void run() {
+						ui = new MainWindow();
+					}
+				}
+			);
+	}
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
-		// TODO 自動生成されたメソッド・スタブ
-
+	public static void main(String ... args) throws Exception {
+		Main main = new Main();
 	}
-
-	public static void main(String xmpphostName, String sniperId, String sniperPassword, String itemId) throws Exception {
-		main(new String[]{xmpphostName, sniperId, sniperPassword, itemId});
-	}
-
 }
