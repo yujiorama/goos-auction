@@ -1,5 +1,7 @@
 package com.github.yujiorama.auctionsinper;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -47,6 +49,21 @@ public class FakeAuctionServer {
 	
 	public void stop() {
 		connection.disconnect();
+	}
+
+	public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
+		messageListener.receiveAMessage(equalTo(Main.XMPP_COMMAND_JOIN));
+		org.hamcrest.MatcherAssert.assertThat(currentChat.getParticipant(), equalTo(sniperId));
+	}
+
+	public void reportPrice(int currentPrice, int increment, String sniperId) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void hasReceivedBid(int biddedPrice, String sniperXmppId) {
+		// TODO 自動生成されたメソッド・スタブ
+		
 	}
 	
 }

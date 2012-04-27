@@ -10,13 +10,15 @@ import org.jivesoftware.smack.packet.Message;
 
 public class Main {
 
-	private MainWindow ui;
-	@SuppressWarnings("unused")
-	private Chat notToBeGCd;
+	public static final String XMPP_COMMAND_JOIN = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_PASSWORD = "auction";
 	public static final String AUCTION_RESOURCE = "Auction";
+
 	private static final String AUCITON_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/%s";
+
+	private MainWindow ui;
+	@SuppressWarnings("unused") private Chat notToBeGCd;
 	
 	public Main() throws Exception {
 		startUserInterface();
@@ -60,7 +62,7 @@ public class Main {
 		);
 		
 		this.notToBeGCd = aChat;
-		aChat.sendMessage(new Message());
+		aChat.sendMessage(XMPP_COMMAND_JOIN);
 		
 	}
 
