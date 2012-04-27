@@ -1,7 +1,9 @@
 TODO
 ====
 
+- Done
 + single item-join, lose without bidding
+- Rest
 + single item-join, bid & lose
 + single item-join, bid & win
 + single item-show price details
