@@ -11,6 +11,8 @@ import org.jivesoftware.smack.packet.Message;
 public class Main {
 
 	private MainWindow ui;
+	@SuppressWarnings("unused")
+	private Chat notToBeGCd;
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_PASSWORD = "auction";
 	public static final String AUCTION_RESOURCE = "Auction";
@@ -40,8 +42,8 @@ public class Main {
 		main.joinAuction(connection(args[0], args[1], args[2]), args[3]);
 	}
 
-	private void joinAuction(XMPPConnection connection, String itemId) {
-		connection.getChatManager().createChat(auctionId(itemId, connection),
+	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+		Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection),
 			new MessageListener() {
 				@Override
 				public void processMessage(Chat chat, Message message) {
@@ -56,6 +58,10 @@ public class Main {
 				}
 			}
 		);
+		
+		this.notToBeGCd = aChat;
+		aChat.sendMessage(new Message());
+		
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
