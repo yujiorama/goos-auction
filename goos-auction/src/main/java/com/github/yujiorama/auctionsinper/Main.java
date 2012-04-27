@@ -2,9 +2,19 @@ package com.github.yujiorama.auctionsinper;
 
 import javax.swing.SwingUtilities;
 
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Message;
+
 public class Main {
 
 	private MainWindow ui;
+	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
+	public static final String AUCTION_PASSWORD = "auction";
+	public static final String AUCTION_RESOURCE = "Auction";
+	private static final String AUCITON_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/%s";
 	
 	public Main() throws Exception {
 		startUserInterface();
@@ -27,5 +37,35 @@ public class Main {
 	 */
 	public static void main(String ... args) throws Exception {
 		Main main = new Main();
+		main.joinAuction(connection(args[0], args[1], args[2]), args[3]);
+	}
+
+	private void joinAuction(XMPPConnection connection, String itemId) {
+		connection.getChatManager().createChat(auctionId(itemId, connection),
+			new MessageListener() {
+				@Override
+				public void processMessage(Chat chat, Message message) {
+					SwingUtilities.invokeLater(
+						new Runnable() {
+							@Override
+							public void run() {
+								ui.showStatus(AuctionStatus.LOST);
+							}
+						}
+					);
+				}
+			}
+		);
+	}
+
+	private String auctionId(String itemId, XMPPConnection connection) {
+		return String.format(AUCITON_ID_FORMAT, itemId, connection.getServiceName(), AUCTION_RESOURCE);
+	}
+
+	private static XMPPConnection connection(String serviceName, String userName, String password) throws XMPPException {
+		XMPPConnection connection = new XMPPConnection(serviceName);
+		connection.connect();
+		connection.login(userName, password, AUCTION_RESOURCE);
+		return connection;
 	}
 }
