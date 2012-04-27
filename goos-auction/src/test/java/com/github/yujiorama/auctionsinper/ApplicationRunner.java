@@ -41,6 +41,6 @@ public class ApplicationRunner {
 	}
 
 	public void hasShownSniperIsBidding() {
-		// TODO
+		driver.showSniperStatus(AuctionStatus.BIDDING);
 	}
 }
