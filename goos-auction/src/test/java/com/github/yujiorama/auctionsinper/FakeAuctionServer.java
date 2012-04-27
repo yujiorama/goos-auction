@@ -9,9 +9,6 @@ import org.jivesoftware.smack.packet.Message;
 public class FakeAuctionServer {
 
 	public static final String XMPP_HOSTNAME = "localhost";
-	private static final String ITEM_ID_AS_LOGIN = "auction-%s";
-	private static final String AUCTION_PASSWORD = "auction";
-	private static final String AUCTION_RESOURCE = "Auction";
 	private XMPPConnection connection;
 	private Chat currentChat;
 	private String itemId;
@@ -24,7 +21,7 @@ public class FakeAuctionServer {
 	
 	public void startSellingItem() throws XMPPException {
 		connection.connect();
-		connection.login(String.format(ITEM_ID_AS_LOGIN, getItemId()), AUCTION_PASSWORD, AUCTION_RESOURCE);
+		connection.login(String.format(Main.ITEM_ID_AS_LOGIN, getItemId()), Main.AUCTION_PASSWORD, Main.AUCTION_RESOURCE);
 		connection.getChatManager().addChatListener(
 			new ChatManagerListener() {
 
