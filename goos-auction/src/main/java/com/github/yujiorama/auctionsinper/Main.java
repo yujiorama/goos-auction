@@ -9,7 +9,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-public class Main implements SniperListener {
+public class Main {
 
 	public static final String XMPP_COMMAND_JOIN = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String XMPP_COMMAND_BID = "SOLVersion: 1.1; Command: BID; Price: %s;";
@@ -53,7 +53,8 @@ public class Main implements SniperListener {
 		this.notToBeGCd = aChat;
 		Auction auction = new XMPPAuction(aChat);
 		aChat.addMessageListener(
-			new AuctionMessageTranslator(new AuctionSniper(auction, this)));
+			new AuctionMessageTranslator(
+				new AuctionSniper(auction, new SniperStateDisplayer())));
 		auction.join();
 	}
 
@@ -78,27 +79,26 @@ public class Main implements SniperListener {
 		return connection;
 	}
 
-	@Override
-	public void sniperLost() {
-		SwingUtilities.invokeLater(
-			new Runnable() {
-				@Override
-				public void run() {
-					ui.showStatus(AuctionStatus.LOST);
-				}
-			}
-		);
-	}
-
-	@Override
-	public void sniperBidding() {
-		SwingUtilities.invokeLater(
+	public class SniperStateDisplayer implements SniperListener {
+		@Override
+		public void sniperLost() {
+			showStatus(AuctionStatus.LOST);
+		}
+	
+		@Override
+		public void sniperBidding() {
+			showStatus(AuctionStatus.BIDDING);
+		}
+		
+		private void showStatus(final AuctionStatus auctionStatus) {
+			SwingUtilities.invokeLater(
 				new Runnable() {
 					@Override
 					public void run() {
-						ui.showStatus(AuctionStatus.BIDDING);
+						ui.showStatus(auctionStatus);
 					}
 				}
 			);
+		}
 	}
 }
