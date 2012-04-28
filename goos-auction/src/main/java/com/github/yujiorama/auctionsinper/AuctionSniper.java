@@ -22,8 +22,8 @@ public class AuctionSniper implements AuctionEventListener {
 
 	@Override
 	public void currentPrice(int currentPrice, int increment) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		this.auction.bid(currentPrice + increment);
+		this.sniperListener.sniperBidding();
 	}
 
 }
