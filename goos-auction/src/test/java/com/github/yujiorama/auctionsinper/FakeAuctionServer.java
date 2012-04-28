@@ -64,7 +64,7 @@ public class FakeAuctionServer {
 	public void hasReceivedBid(int price, String sniperId) throws InterruptedException {
 		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 		messageListener.receiveAMessage(equalTo(
-			String.format("SOLVersion: 1.1; Command: BID; Price: %s;", price)));
+			String.format(Main.XMPP_COMMAND_BID, price)));
 	}
 	
 }

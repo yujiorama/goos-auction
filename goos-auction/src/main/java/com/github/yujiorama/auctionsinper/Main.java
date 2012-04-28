@@ -12,6 +12,7 @@ import org.jivesoftware.smack.XMPPException;
 public class Main implements SniperListener {
 
 	public static final String XMPP_COMMAND_JOIN = "SOLVersion: 1.1; Command: JOIN;";
+	public static final String XMPP_COMMAND_BID = "SOLVersion: 1.1; Command: BID; Price: %s;";
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_PASSWORD = "auction";
 	public static final String AUCTION_RESOURCE = "Auction";
@@ -47,17 +48,23 @@ public class Main implements SniperListener {
 
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
 		disconnectWhenUIClosed(connection);
-		Auction nullAuction = new Auction() {
+		final Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
+		
+		this.notToBeGCd = aChat;
+		Auction auction = new Auction() {
 			@Override
-			public void bid(int price) {
+			public void bid(int amount) {
+				try {
+					aChat.sendMessage(String.format(XMPP_COMMAND_BID, amount));
+				} catch (XMPPException e) {
+					// TODO 自動生成された catch ブロック
+					e.printStackTrace();
+				}
 			}
 			
 		};
-		Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection),
-			new AuctionMessageTranslator(new AuctionSniper(nullAuction, this))
-		);
-		
-		this.notToBeGCd = aChat;
+		aChat.addMessageListener(
+			new AuctionMessageTranslator(new AuctionSniper(auction, this)));
 		aChat.sendMessage(XMPP_COMMAND_JOIN);
 		
 	}
