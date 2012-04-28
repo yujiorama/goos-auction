@@ -9,7 +9,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-public class Main implements AuctionEventListener {
+public class Main implements SniperListener {
 
 	public static final String XMPP_COMMAND_JOIN = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -48,7 +48,7 @@ public class Main implements AuctionEventListener {
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
 		disconnectWhenUIClosed(connection);
 		Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection),
-			new AuctionMessageTranslator(this)
+			new AuctionMessageTranslator(new AuctionSniper(this))
 		);
 		
 		this.notToBeGCd = aChat;
@@ -78,7 +78,7 @@ public class Main implements AuctionEventListener {
 	}
 
 	@Override
-	public void auctionClosed() {
+	public void sniperLost() {
 		SwingUtilities.invokeLater(
 			new Runnable() {
 				@Override
@@ -87,11 +87,5 @@ public class Main implements AuctionEventListener {
 				}
 			}
 		);
-	}
-
-	@Override
-	public void currentPrice(int currentPrice, int increment) {
-		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 }
