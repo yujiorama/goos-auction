@@ -88,4 +88,10 @@ public class Main implements SniperListener {
 			}
 		);
 	}
+
+	@Override
+	public void sniperBidding() {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
 }
