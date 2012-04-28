@@ -2,14 +2,15 @@ package com.github.yujiorama.auctionsinper;
 
 public class AuctionSniper implements AuctionEventListener {
 
+	private final SniperListener sniperListener;
+
 	public AuctionSniper(SniperListener sniperListener) {
-		// TODO 自動生成されたコンストラクター・スタブ
+		this.sniperListener = sniperListener;
 	}
 
 	@Override
 	public void auctionClosed() {
-		// TODO 自動生成されたメソッド・スタブ
-
+		this.sniperListener.sniperLost();
 	}
 
 	@Override
