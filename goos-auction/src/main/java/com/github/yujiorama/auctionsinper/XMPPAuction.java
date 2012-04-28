@@ -13,21 +13,21 @@ public class XMPPAuction implements Auction {
 	
 	@Override
 	public void bid(int amount) {
-		try {
-			chat.sendMessage(String.format(Main.XMPP_COMMAND_BID, amount));
-		} catch (XMPPException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
+		sendMessage(String.format(Main.XMPP_COMMAND_BID, amount));
 	}
 
 	@Override
 	public void join() {
+		sendMessage(Main.XMPP_COMMAND_JOIN);
+	}
+
+	private void sendMessage(String message) {
 		try {
-			chat.sendMessage(Main.XMPP_COMMAND_JOIN);
+			chat.sendMessage(message);
 		} catch (XMPPException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 	}
+	
 }
