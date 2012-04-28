@@ -27,11 +27,11 @@ public class AuctionMessageTranslatorTest {
 		Mockery context = new Mockery();
 		Expectations expectations = new Expectations();
 		AuctionEventListener listener = context.mock(AuctionEventListener.class);
-		expectations.oneOf(listener).currentPrice(192, 8);
+		expectations.exactly(1).of(listener).currentPrice(192, 7);
 		context.checking(expectations);
 		
 		Message message = new Message();
-		message.setBody("SOLVersion: 1.1; PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;");
+		message.setBody("SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; Bidder: Someone else;");
 		AuctionMessageTranslator translator = new AuctionMessageTranslator(listener);
 		translator.processMessage(null, message);
 	}
