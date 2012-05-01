@@ -4,8 +4,8 @@ TODO
 - Done
 + single item-join, lose without bidding
 + single item-join, bid & lose
-- Rest
 + single item-join, bid & win
+- Rest
 + single item-show price details
 + multiple items
 + add ne witems through the GUI
