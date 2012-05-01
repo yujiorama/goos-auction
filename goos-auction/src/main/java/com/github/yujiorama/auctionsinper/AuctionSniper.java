@@ -30,7 +30,7 @@ public class AuctionSniper implements AuctionEventListener {
 		switch (priceSource) {
 		case FromOtherBidder:
 			this.auction.bid(currentPrice + increment);
-			this.sniperListener.sniperBidding();
+			this.sniperListener.sniperBidding(null);
 			this.isWinning = false;
 			break;
 		case FromSniper:

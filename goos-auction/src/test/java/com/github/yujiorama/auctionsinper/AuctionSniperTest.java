@@ -32,7 +32,7 @@ public class AuctionSniperTest {
 		final int increment = 25;
 		context.checking(new Expectations(){{
 			oneOf(auction).bid(price + increment);
-			atLeast(1).of(sniperListener).sniperBidding();
+			atLeast(1).of(sniperListener).sniperBidding(new SniperState(Main.ITEM_ID_AS_LOGIN, price, price + increment));
 		}});
 		AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
 		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
@@ -55,7 +55,7 @@ public class AuctionSniperTest {
 		final SniperListener sniperListener = context.mock(SniperListener.class);
 		context.checking(new Expectations(){{
 			ignoring(auction);
-			allowing(sniperListener).sniperBidding();
+			allowing(sniperListener).sniperBidding(null);
 				then(sniperState.is(AuctionStatus.BIDDING.toString()));
 			oneOf(sniperListener).sniperLost();
 				when(sniperState.is(AuctionStatus.BIDDING.toString()));
@@ -89,11 +89,11 @@ public class AuctionSniperTest {
 		final SniperListener sniperListener = context.mock(SniperListener.class);
 		context.checking(new Expectations(){{
 			ignoring(auction);
-			allowing(sniperListener).sniperBidding();
+			allowing(sniperListener).sniperBidding(null);
 				then(sniperState.is(AuctionStatus.BIDDING.toString()));
 			allowing(sniperListener).sniperWinning();
 				then(sniperState.is(AuctionStatus.WINNING.toString()));
-			allowing(sniperListener).sniperBidding();
+			allowing(sniperListener).sniperBidding(null);
 				then(sniperState.is(AuctionStatus.BIDDING.toString()));
 			allowing(sniperListener).sniperWinning();
 				then(sniperState.is(AuctionStatus.WINNING.toString()));
