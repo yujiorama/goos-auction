@@ -2,6 +2,7 @@ package com.github.yujiorama.auctionsinper;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.States;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,7 @@ public class AuctionSniperTest {
 	private Mockery context = new Mockery();
 
 	@Test
-	public void report_lost_when_auction_closed() {
+	public void report_lost_when_auction_closed_immediately() {
 		final SniperListener sniperListener = context.mock(SniperListener.class);
 		context.checking(new Expectations(){{
 			oneOf(sniperListener).sniperLost();
@@ -45,5 +46,22 @@ public class AuctionSniperTest {
 		}});
 		AuctionSniper sniper = new AuctionSniper(sniperListener);
 		sniper.currentPrice(200, 10, PriceSource.FromSniper);
+	}
+	
+	@Test
+	public void report_lost_when_auction_closed_when_bidding() {
+		final States sniperState = context.states("sniper state");
+		final Auction auction = context.mock(Auction.class);
+		final SniperListener sniperListener = context.mock(SniperListener.class);
+		context.checking(new Expectations(){{
+			ignoring(auction);
+			allowing(sniperListener).sniperBidding();
+				then(sniperState.is(AuctionStatus.BIDDING.toString()));
+			oneOf(sniperListener).sniperLost();
+				when(sniperState.is(AuctionStatus.BIDDING.toString()));
+		}});
+		AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
+		sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
+		sniper.auctionClosed();
 	}
 }
