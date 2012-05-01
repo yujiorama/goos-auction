@@ -91,8 +91,15 @@ public class Main {
 		}
 		
 		@Override
-		public void sniperBidding(SniperState state) {
-			showStatus(AuctionStatus.BIDDING);
+		public void sniperBidding(final SniperState state) {
+			SwingUtilities.invokeLater(
+				new Runnable() {
+					@Override
+					public void run() {
+						ui.sniperStatusChanged(state, AuctionStatus.BIDDING);
+					}
+				}
+			);
 		}
 		
 		@Override
