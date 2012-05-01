@@ -81,4 +81,31 @@ public class AuctionSniperTest {
 		sniper.currentPrice(123, 45, PriceSource.FromSniper);
 		sniper.auctionClosed();
 	}
+	
+	@Test
+	public void report_won_when_auction_closed_when_any_state() {
+		final States sniperState = context.states("sniper state");
+		final Auction auction = context.mock(Auction.class);
+		final SniperListener sniperListener = context.mock(SniperListener.class);
+		context.checking(new Expectations(){{
+			ignoring(auction);
+			allowing(sniperListener).sniperBidding();
+				then(sniperState.is(AuctionStatus.BIDDING.toString()));
+			allowing(sniperListener).sniperWinning();
+				then(sniperState.is(AuctionStatus.WINNING.toString()));
+			allowing(sniperListener).sniperBidding();
+				then(sniperState.is(AuctionStatus.BIDDING.toString()));
+			allowing(sniperListener).sniperWinning();
+				then(sniperState.is(AuctionStatus.WINNING.toString()));
+			atLeast(1).of(sniperListener).sniperWon();
+				when(sniperState.is(AuctionStatus.WINNING.toString()));
+		}});
+		AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
+		sniper.currentPrice(678, 90, PriceSource.FromOtherBidder);
+		sniper.currentPrice(768, 10, PriceSource.FromSniper);
+		sniper.currentPrice(778, 10, PriceSource.FromOtherBidder);
+		sniper.currentPrice(788, 10, PriceSource.FromSniper);
+		sniper.auctionClosed();
+	}
+
 }
