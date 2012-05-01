@@ -7,7 +7,6 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
 
 public class FakeAuctionServer {
 
@@ -45,7 +44,7 @@ public class FakeAuctionServer {
 	}
 	
 	public void announceClosed() throws XMPPException {
-		currentChat.sendMessage(new Message("SOLVersion: 1.1; Event: CLOSE;"));
+		currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
 	}
 	
 	public void stop() {
@@ -65,7 +64,7 @@ public class FakeAuctionServer {
 	public void hasReceivedBid(int price, String sniperId) throws InterruptedException {
 		assertThat(currentChat.getParticipant(), equalTo(sniperId));
 		messageListener.receiveAMessage(equalTo(
-			String.format("SOLVersion: 1.1; Command: BID; Price: %s;", price)));
+			String.format(Main.XMPP_COMMAND_BID, price)));
 	}
 	
 }

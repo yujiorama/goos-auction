@@ -9,9 +9,10 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-public class Main implements AuctionEventListener {
+public class Main {
 
 	public static final String XMPP_COMMAND_JOIN = "SOLVersion: 1.1; Command: JOIN;";
+	public static final String XMPP_COMMAND_BID = "SOLVersion: 1.1; Command: BID; Price: %s;";
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_PASSWORD = "auction";
 	public static final String AUCTION_RESOURCE = "Auction";
@@ -47,13 +48,14 @@ public class Main implements AuctionEventListener {
 
 	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
 		disconnectWhenUIClosed(connection);
-		Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection),
-			new AuctionMessageTranslator(this)
-		);
+		final Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
 		
 		this.notToBeGCd = aChat;
-		aChat.sendMessage(XMPP_COMMAND_JOIN);
-		
+		Auction auction = new XMPPAuction(aChat);
+		aChat.addMessageListener(
+			new AuctionMessageTranslator(
+				new AuctionSniper(auction, new SniperStateDisplayer())));
+		auction.join();
 	}
 
 	private void disconnectWhenUIClosed(final XMPPConnection connection) {
@@ -77,21 +79,26 @@ public class Main implements AuctionEventListener {
 		return connection;
 	}
 
-	@Override
-	public void auctionClosed() {
-		SwingUtilities.invokeLater(
-			new Runnable() {
-				@Override
-				public void run() {
-					ui.showStatus(AuctionStatus.LOST);
-				}
-			}
-		);
-	}
-
-	@Override
-	public void currentPrice(int currentPrice, int increment) {
-		// TODO 自動生成されたメソッド・スタブ
+	public class SniperStateDisplayer implements SniperListener {
+		@Override
+		public void sniperLost() {
+			showStatus(AuctionStatus.LOST);
+		}
+	
+		@Override
+		public void sniperBidding() {
+			showStatus(AuctionStatus.BIDDING);
+		}
 		
+		private void showStatus(final AuctionStatus auctionStatus) {
+			SwingUtilities.invokeLater(
+				new Runnable() {
+					@Override
+					public void run() {
+						ui.showStatus(auctionStatus);
+					}
+				}
+			);
+		}
 	}
 }
