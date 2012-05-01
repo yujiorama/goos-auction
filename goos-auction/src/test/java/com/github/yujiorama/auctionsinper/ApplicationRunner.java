@@ -29,18 +29,26 @@ public class ApplicationRunner {
 		driver = new AuctionSniperDriver(1000);
 		driver.showSniperStatus(AuctionStatus.JOINING);
 	}
-	
-	public void showsSniperHasLostAuction() {
-		driver.showSniperStatus(AuctionStatus.LOST);
-	}
-	
+
 	public void stop() {
 		if (driver != null) {
 			driver.dispose();
 		}
 	}
+	
+	public void showsSniperHasLostAuction() {
+		driver.showSniperStatus(AuctionStatus.LOST);
+	}
 
+	public void showsSniperHasWonAuction() {
+		driver.showSniperStatus(AuctionStatus.WON);
+	}
+	
 	public void hasShownSniperIsBidding() {
 		driver.showSniperStatus(AuctionStatus.BIDDING);
+	}
+
+	public void hasShownSniperIsWinning() {
+		driver.showSniperStatus(AuctionStatus.WINNING);
 	}
 }
