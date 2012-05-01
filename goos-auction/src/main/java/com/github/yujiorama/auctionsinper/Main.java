@@ -54,7 +54,7 @@ public class Main {
 		Auction auction = new XMPPAuction(aChat);
 		aChat.addMessageListener(
 			new AuctionMessageTranslator(
-				connection.getUser(), new AuctionSniper(auction, new SniperStateDisplayer())));
+				connection.getUser(), new AuctionSniper(itemId, auction, new SniperStateDisplayer())));
 		auction.join();
 	}
 

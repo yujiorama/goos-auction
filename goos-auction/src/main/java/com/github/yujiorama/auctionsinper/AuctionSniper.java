@@ -5,13 +5,10 @@ public class AuctionSniper implements AuctionEventListener {
 	private final Auction auction;
 	private final SniperListener sniperListener;
 	private boolean isWinning;
+	private final String itemId;
 
-	public AuctionSniper(SniperListener sniperListener) {
-		this.auction = null;
-		this.sniperListener = sniperListener;
-	}
-
-	public AuctionSniper(Auction auction, SniperListener sniperListener) {
+	public AuctionSniper(String itemId, Auction auction, SniperListener sniperListener) {
+		this.itemId = itemId;
 		this.auction = auction;
 		this.sniperListener = sniperListener;
 	}
@@ -30,7 +27,7 @@ public class AuctionSniper implements AuctionEventListener {
 		switch (priceSource) {
 		case FromOtherBidder:
 			this.auction.bid(currentPrice + increment);
-			this.sniperListener.sniperBidding(null);
+			this.sniperListener.sniperBidding(new SniperState(itemId, currentPrice, currentPrice + increment));
 			this.isWinning = false;
 			break;
 		case FromSniper:
