@@ -38,4 +38,8 @@ public class AuctionEvent {
 		return Integer.parseInt(fields.get("Increment"));
 	}
 
+	public String bidder() {
+		return fields.get("Bidder");
+	}
+
 }

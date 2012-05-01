@@ -8,4 +8,8 @@ public interface SniperListener extends EventListener {
 
 	public void sniperBidding();
 
+	public void sniperWinning();
+
+	public void sniperWon();
+
 }
