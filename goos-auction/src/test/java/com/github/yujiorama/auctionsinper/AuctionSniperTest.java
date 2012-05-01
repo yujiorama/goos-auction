@@ -15,26 +15,35 @@ public class AuctionSniperTest {
 
 	@Test
 	public void report_lost_when_auction_closed() {
-		Expectations expectations = new Expectations();
-		SniperListener sniperListener = context.mock(SniperListener.class);
-		expectations.oneOf(sniperListener).sniperLost();
-		context.checking(expectations);
+		final SniperListener sniperListener = context.mock(SniperListener.class);
+		context.checking(new Expectations(){{
+			oneOf(sniperListener).sniperLost();
+		}});
 		AuctionSniper sniper = new AuctionSniper(sniperListener);
 		sniper.auctionClosed();
 	}
 	
 	@Test
 	public void bids_higher_and_reports_bidding_when_new_price_arrives() {
-		Auction auction = context.mock(Auction.class);
-		SniperListener sniperListener = context.mock(SniperListener.class);
-		Expectations expectations = new Expectations();
-		int price = 1001;
-		int increment = 25;
-		expectations.oneOf(auction).bid(price + increment);
-		expectations.atLeast(1).of(sniperListener).sniperBidding();
-		context.checking(expectations);
+		final Auction auction = context.mock(Auction.class);
+		final SniperListener sniperListener = context.mock(SniperListener.class);
+		final int price = 1001;
+		final int increment = 25;
+		context.checking(new Expectations(){{
+			oneOf(auction).bid(price + increment);
+			atLeast(1).of(sniperListener).sniperBidding();
+		}});
 		AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
-		sniper.currentPrice(price, increment, PriceSource.FromSniper);
+		sniper.currentPrice(price, increment, PriceSource.FromOtherBidder);
 	}
-
+	
+	@Test
+	public void report_iswinning_when_current_price_comes_from_sniper() {
+		final SniperListener sniperListener = context.mock(SniperListener.class);
+		context.checking(new Expectations(){{
+			atLeast(1).of(sniperListener).sniperWinning();
+		}});
+		AuctionSniper sniper = new AuctionSniper(sniperListener);
+		sniper.currentPrice(200, 10, PriceSource.FromSniper);
+	}
 }
