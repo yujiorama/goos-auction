@@ -6,6 +6,8 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.github.yujiorama.auctionsinper.AuctionEventListener.PriceSource;
+
 @RunWith(JMock.class)
 public class AuctionSniperTest {
 
@@ -32,7 +34,7 @@ public class AuctionSniperTest {
 		expectations.atLeast(1).of(sniperListener).sniperBidding();
 		context.checking(expectations);
 		AuctionSniper sniper = new AuctionSniper(auction, sniperListener);
-		sniper.currentPrice(price, increment);
+		sniper.currentPrice(price, increment, PriceSource.FromSniper);
 	}
 
 }

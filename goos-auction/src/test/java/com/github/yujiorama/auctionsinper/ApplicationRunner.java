@@ -3,9 +3,9 @@ package com.github.yujiorama.auctionsinper;
 public class ApplicationRunner {
 	
 	public static final String SNIPER_XMPP_ID;
+	public static final String SNIPER_ID = "sniper";
 	
 	private static final String SNIPER_PASSWORD = "sniper";
-	private static final String SNIPER_ID = "sniper";
 	private static final boolean on = true;
 	private AuctionSniperDriver driver;
 
