@@ -1,5 +1,6 @@
 package com.github.yujiorama.auctionsinper;
 
+import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -19,5 +20,14 @@ public class AuctionSniperDriver extends JFrameDriver {
 
 	public void showSniperStatus(AuctionStatus auctionStatus) {
 		new JTableDriver(this).hasCell(withLabelText(equalTo(auctionStatus.toString())));
+	}
+
+	public void showSniperStatus(String itemId, int lastPrice, int lastBid, AuctionStatus auctionStatus) {
+		JTableDriver table = new JTableDriver(this);
+		table.hasRow(matching(
+			withLabelText(itemId),
+			withLabelText(String.valueOf(lastPrice)),
+			withLabelText(String.valueOf(lastBid)),
+			withLabelText(auctionStatus.toString())));
 	}
 }
