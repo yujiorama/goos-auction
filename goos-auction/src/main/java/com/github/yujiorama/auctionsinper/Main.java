@@ -19,28 +19,19 @@ public class Main {
 
 	private static final String AUCITON_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/%s";
 
+	private final SniperTableModel sniperTableModel = new SniperTableModel();
 	private MainWindow ui;
 	@SuppressWarnings("unused") private Chat notToBeGCd;
 	
 	public Main() throws Exception {
-		startUserInterface();
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				ui = new MainWindow(sniperTableModel);
+			}
+		});
 	}
 	
-	private void startUserInterface() throws Exception {
-		SwingUtilities.invokeAndWait(
-				new Runnable() {
-
-					@Override
-					public void run() {
-						ui = new MainWindow();
-					}
-				}
-			);
-	}
-	/**
-	 * @param args
-	 * @throws Exception 
-	 */
 	public static void main(String ... args) throws Exception {
 		Main main = new Main();
 		main.joinAuction(connection(args[0], args[1], args[2]), args[3]);
@@ -54,7 +45,9 @@ public class Main {
 		Auction auction = new XMPPAuction(aChat);
 		aChat.addMessageListener(
 			new AuctionMessageTranslator(
-				connection.getUser(), new AuctionSniper(auction, new SniperStateDisplayer())));
+				connection.getUser(),
+				new AuctionSniper(itemId, auction,
+					new SwingThreadSniperListener(sniperTableModel))));
 		auction.join();
 	}
 
@@ -79,36 +72,22 @@ public class Main {
 		return connection;
 	}
 
-	public class SniperStateDisplayer implements SniperListener {
-		@Override
-		public void sniperLost() {
-			showStatus(AuctionStatus.LOST);
-		}
-	
-		@Override
-		public void sniperWon() {
-			showStatus(AuctionStatus.WON);
+	public class SwingThreadSniperListener implements SniperListener {
+
+		private final SniperTableModel snipers;
+		
+		public SwingThreadSniperListener(final SniperTableModel snipers) {
+			this.snipers = snipers;
 		}
 		
 		@Override
-		public void sniperBidding() {
-			showStatus(AuctionStatus.BIDDING);
-		}
-		
-		@Override
-		public void sniperWinning() {
-			showStatus(AuctionStatus.WINNING);
-		}
-		
-		private void showStatus(final AuctionStatus auctionStatus) {
-			SwingUtilities.invokeLater(
-				new Runnable() {
-					@Override
-					public void run() {
-						ui.showStatus(auctionStatus);
-					}
+		public void sniperStateChanged(final SniperSnapshot snapshot) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					snipers.sniperStatusChanged(snapshot);
 				}
-			);
+			});
 		}
 	}
 }
