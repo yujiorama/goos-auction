@@ -12,8 +12,6 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.yujiorama.auctionsinper.SniperTableModel.Column;
-
 public class SniperTableModelTest {
 	private final Mockery context = new Mockery();
 	private SniperTableModel model = new SniperTableModel();
@@ -26,7 +24,7 @@ public class SniperTableModelTest {
 	
 	@Test
 	public void hasEnoughColumns() {
-		assertThat(model.getColumnCount(), equalTo(SniperTableModel.Column.values().length));
+		assertThat(model.getColumnCount(), equalTo(Column.values().length));
 	}
 	
 	@Test
