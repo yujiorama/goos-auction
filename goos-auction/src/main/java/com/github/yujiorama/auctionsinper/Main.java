@@ -80,6 +80,7 @@ public class Main {
 	}
 
 	public class SniperStateDisplayer implements SniperListener {
+
 		@Override
 		public void sniperLost() {
 			showStatus(AuctionStatus.LOST);
@@ -91,12 +92,12 @@ public class Main {
 		}
 		
 		@Override
-		public void sniperBidding(final SniperState state) {
+		public void sniperStateChanged(final SniperSnapshot state) {
 			SwingUtilities.invokeLater(
 				new Runnable() {
 					@Override
 					public void run() {
-						ui.sniperStatusChanged(state, AuctionStatus.BIDDING);
+						ui.sniperStatusChanged(state);
 					}
 				}
 			);

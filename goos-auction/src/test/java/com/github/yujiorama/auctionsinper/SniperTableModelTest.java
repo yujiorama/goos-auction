@@ -12,6 +12,7 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.yujiorama.auctionsinper.AuctionSniper.SniperState;
 import com.github.yujiorama.auctionsinper.SniperTableModel.Column;
 
 public class SniperTableModelTest {
@@ -34,7 +35,7 @@ public class SniperTableModelTest {
 		context.checking(new Expectations(){{
 			oneOf(listener).tableChanged(with(aRowChangedEvent()));
 		}});
-		model.sniperStatusChanged(new SniperState("item id", 555, 666), AuctionStatus.BIDDING);
+		model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
 		
 		assertEqualsOf(Column.ITEM_IDENTIFIER, "item id");
 		assertEqualsOf(Column.LAST_PRICE, 555);

@@ -2,6 +2,14 @@ package com.github.yujiorama.auctionsinper;
 
 public class AuctionSniper implements AuctionEventListener {
 
+	public enum SniperState {
+		JOINNING,
+		BIDDING,
+		WINNING,
+		LOST,
+		WON;
+	}
+	
 	private final Auction auction;
 	private final SniperListener sniperListener;
 	private boolean isWinning;
@@ -24,16 +32,15 @@ public class AuctionSniper implements AuctionEventListener {
 
 	@Override
 	public void currentPrice(int currentPrice, int increment, PriceSource priceSource) {
-		switch (priceSource) {
-		case FromOtherBidder:
-			this.auction.bid(currentPrice + increment);
-			this.sniperListener.sniperBidding(new SniperState(itemId, currentPrice, currentPrice + increment));
-			this.isWinning = false;
-			break;
-		case FromSniper:
+		isWinning = priceSource == PriceSource.FromSniper;
+		if (isWinning) {
 			this.sniperListener.sniperWinning();
-			this.isWinning = true;
-			break;
+		} else {
+			final int bid = currentPrice + increment;
+			this.auction.bid(bid);
+			this.sniperListener.sniperStateChanged(
+				new SniperSnapshot(itemId, currentPrice, bid, SniperState.BIDDING)
+			);
 		}
 	}
 

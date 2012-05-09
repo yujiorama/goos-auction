@@ -41,7 +41,7 @@ public class MainWindow extends JFrame {
 		sniperTableModel.setStatusText(auctionStatus.toString());
 	}
 
-	public void sniperStatusChanged(SniperState newState, AuctionStatus newStatus) {
-		sniperTableModel.sniperStatusChanged(newState, newStatus);
+	public void sniperStatusChanged(SniperSnapshot newSnapshot) {
+		sniperTableModel.sniperStatusChanged(newSnapshot);
 	}
 }
