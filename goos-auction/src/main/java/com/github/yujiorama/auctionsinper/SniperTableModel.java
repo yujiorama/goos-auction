@@ -26,6 +26,11 @@ public class SniperTableModel extends AbstractTableModel {
 	}
 
 	@Override
+	public String getColumnName(int column) {
+		return Column.at(column).label;
+	}
+
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		return Column.at(columnIndex).valueIn(snapshot);
 	}

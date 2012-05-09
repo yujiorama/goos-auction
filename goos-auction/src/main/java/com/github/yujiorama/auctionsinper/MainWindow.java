@@ -12,7 +12,7 @@ import javax.swing.JTable;
 
 public class MainWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private static final String APPLICATION_NAME = "Auction Sniper";
+	public static final String APPLICATION_NAME = "Auction Sniper";
 	public static final String MAIN_WINDOW_NAME = "auction-sniper";
 	public static final String SNIPER_STATUS_NAME = "sniper status";
 	public static final String SNIPER_TABLE_NAME = "sniper table";
