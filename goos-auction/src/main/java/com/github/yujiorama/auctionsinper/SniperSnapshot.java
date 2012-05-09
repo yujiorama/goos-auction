@@ -1,6 +1,5 @@
 package com.github.yujiorama.auctionsinper;
 
-import com.github.yujiorama.auctionsinper.AuctionSniper.SniperState;
 
 public class SniperSnapshot {
 	public final String itemId;
@@ -32,6 +31,10 @@ public class SniperSnapshot {
 	
 	public SniperSnapshot winning(int newLastPrice) {
 		return new SniperSnapshot(itemId, newLastPrice, lastBid, SniperState.WINNING);
+	}
+	
+	public SniperSnapshot closed() {
+		return new SniperSnapshot(itemId, lastPrice, lastBid, state.whenAuctionClosed());
 	}
 	
 	@Override
@@ -86,4 +89,5 @@ public class SniperSnapshot {
 				.append("]");
 		return builder.toString();
 	}
+
 }

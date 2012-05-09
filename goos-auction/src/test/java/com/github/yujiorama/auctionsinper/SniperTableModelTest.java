@@ -12,7 +12,6 @@ import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.yujiorama.auctionsinper.AuctionSniper.SniperState;
 import com.github.yujiorama.auctionsinper.SniperTableModel.Column;
 
 public class SniperTableModelTest {

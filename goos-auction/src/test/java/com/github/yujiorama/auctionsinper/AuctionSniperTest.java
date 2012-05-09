@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.github.yujiorama.auctionsinper.AuctionEventListener.PriceSource;
-import com.github.yujiorama.auctionsinper.AuctionSniper.SniperState;
 
 @RunWith(JMock.class)
 public class AuctionSniperTest {
@@ -25,7 +24,7 @@ public class AuctionSniperTest {
 	public void report_lost_when_auction_closed_immediately() {
 		final SniperListener sniperListener = context.mock(SniperListener.class);
 		context.checking(new Expectations(){{
-			oneOf(sniperListener).sniperLost();
+			atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.LOST)));
 		}});
 		AuctionSniper sniper = new AuctionSniper(ANY_ITEM_ID, NULL_AUCTION, sniperListener);
 		sniper.auctionClosed();
@@ -71,9 +70,9 @@ public class AuctionSniperTest {
 		final SniperListener sniperListener = context.mock(SniperListener.class);
 		context.checking(new Expectations(){{
 			ignoring(auction);
-			allowing(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.BIDDING)));
+			atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.BIDDING)));
 				then(sniperState.is(AuctionStatus.BIDDING.toString()));
-			oneOf(sniperListener).sniperLost();
+			atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.LOST)));
 				when(sniperState.is(AuctionStatus.BIDDING.toString()));
 		}});
 
@@ -92,7 +91,7 @@ public class AuctionSniperTest {
 			atLeast(1).of(sniperListener).sniperStateChanged(
 				new SniperSnapshot(ANY_ITEM_ID, 123, 0, SniperState.WINNING));
 				then(sniperState.is(AuctionStatus.WINNING.toString()));
-			oneOf(sniperListener).sniperWon();
+			atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.WON)));
 				when(sniperState.is(AuctionStatus.WINNING.toString()));
 		}});
 		AuctionSniper sniper = new AuctionSniper(ANY_ITEM_ID, auction, sniperListener);
@@ -111,7 +110,7 @@ public class AuctionSniperTest {
 				then(sniperState.is(AuctionStatus.BIDDING.toString()));
 			atLeast(2).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.WINNING)));//new SniperSnapshot(ANY_ITEM_ID, 778, 768, SniperState.WINNING));
 				then(sniperState.is(AuctionStatus.WINNING.toString()));
-			atLeast(1).of(sniperListener).sniperWon();
+			atLeast(1).of(sniperListener).sniperStateChanged(with(aSniperThatIs(SniperState.WON)));
 				when(sniperState.is(AuctionStatus.WINNING.toString()));
 		}});
 		AuctionSniper sniper = new AuctionSniper(ANY_ITEM_ID, auction, sniperListener);

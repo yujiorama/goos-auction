@@ -2,14 +2,6 @@ package com.github.yujiorama.auctionsinper;
 
 public class AuctionSniper implements AuctionEventListener {
 
-	public enum SniperState {
-		JOINNING,
-		LOST,
-		BIDDING,
-		WON,
-		WINNING;
-	}
-	
 	private final Auction auction;
 	private final SniperListener sniperListener;
 	private boolean isWinning;
@@ -23,11 +15,8 @@ public class AuctionSniper implements AuctionEventListener {
 
 	@Override
 	public void auctionClosed() {
-		if (isWinning) {
-			this.sniperListener.sniperWon();
-		} else {
-			this.sniperListener.sniperLost();
-		}
+		this.snapshot = snapshot.closed();
+		notifyChange();
 	}
 
 	@Override
@@ -40,7 +29,11 @@ public class AuctionSniper implements AuctionEventListener {
 			this.auction.bid(bid);
 			this.snapshot = snapshot.bidding(currentPrice, bid);
 		}
-		this.sniperListener.sniperStateChanged(this.snapshot);
+		notifyChange();
 	}
 
+	private void notifyChange() {
+		this.sniperListener.sniperStateChanged(this.snapshot);
+	}
+	
 }
