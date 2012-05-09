@@ -4,10 +4,10 @@ public class AuctionSniper implements AuctionEventListener {
 
 	public enum SniperState {
 		JOINNING,
-		BIDDING,
-		WINNING,
 		LOST,
-		WON;
+		BIDDING,
+		WON,
+		WINNING;
 	}
 	
 	private final Auction auction;

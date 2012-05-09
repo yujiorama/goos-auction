@@ -103,11 +103,6 @@ public class Main {
 			);
 		}
 		
-		@Override
-		public void sniperWinning() {
-			showStatus(AuctionStatus.WINNING);
-		}
-		
 		private void showStatus(final AuctionStatus auctionStatus) {
 			SwingUtilities.invokeLater(
 				new Runnable() {

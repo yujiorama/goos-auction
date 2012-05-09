@@ -18,7 +18,10 @@ public class SniperTableModel extends AbstractTableModel {
 	private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0);
 	private static final String[] STATUS_TEXT = {
 		AuctionStatus.JOINING.toString(),
-		AuctionStatus.BIDDING.toString()
+		AuctionStatus.LOST.toString(),
+		AuctionStatus.BIDDING.toString(),
+		AuctionStatus.WON.toString(),
+		AuctionStatus.WINNING.toString(),
 	};
 	private SniperSnapshot snapshot = STARTING_UP;
 
