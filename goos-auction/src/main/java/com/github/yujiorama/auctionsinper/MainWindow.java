@@ -37,10 +37,6 @@ public class MainWindow extends JFrame {
 		return table;
 	}
 
-	public void showStatus(AuctionStatus auctionStatus) {
-		sniperTableModel.setStatusText(auctionStatus.toString());
-	}
-
 	public void sniperStatusChanged(SniperSnapshot newSnapshot) {
 		sniperTableModel.sniperStatusChanged(newSnapshot);
 	}
