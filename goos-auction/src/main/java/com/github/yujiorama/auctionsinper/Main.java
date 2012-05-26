@@ -2,6 +2,7 @@ package com.github.yujiorama.auctionsinper;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +43,9 @@ public class Main {
 		}
 	}
 
-	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+	private void joinAuction(XMPPConnection connection, String itemId) throws Exception {
 		disconnectWhenUIClosed(connection);
+		safelyAddItemToModel(itemId);
 		final Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
 		
 		this.notToBeGCd.add(aChat);
@@ -66,6 +68,15 @@ public class Main {
 		});
 	}
 
+	private void safelyAddItemToModel(final String itemId) throws Exception {
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				sniperTableModel.addSniper(SniperSnapshot.joining(itemId));
+			}
+		});
+	}
+	
 	private String auctionId(String itemId, XMPPConnection connection) {
 		return String.format(AUCITON_ID_FORMAT, itemId, connection.getServiceName(), AUCTION_RESOURCE);
 	}

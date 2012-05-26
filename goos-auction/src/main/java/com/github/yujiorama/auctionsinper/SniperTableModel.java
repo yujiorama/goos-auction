@@ -43,5 +43,10 @@ public class SniperTableModel extends AbstractTableModel {
 	public static String textFor(SniperState state) {
 		return STATUS_TEXT[state.ordinal()];
 	}
+
+	public void addSniper(SniperSnapshot snapshot) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
 	
 }
