@@ -48,16 +48,6 @@ public class ApplicationRunner {
 		driver.showSniperStatus(AuctionStatus.WON);
 	}
 	
-	@Deprecated
-	public void hasShownSniperIsBidding() {
-		driver.showSniperStatus(AuctionStatus.BIDDING);
-	}
-
-	@Deprecated
-	public void hasShownSniperIsWinning() {
-		driver.showSniperStatus(AuctionStatus.WINNING);
-	}
-
 	public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
 		driver.showSniperStatus(itemId, lastPrice, lastBid, AuctionStatus.BIDDING);
 	}
