@@ -1,11 +1,13 @@
 package com.github.yujiorama.auctionsinper;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
@@ -26,8 +28,12 @@ public class SingleMessageListener implements MessageListener {
 	
 	public void receiveAMessage(Matcher<? super String> messageMatcher) throws InterruptedException {
 		Message message = messages.poll(5, TimeUnit.SECONDS);
-		assertThat("Message", message, is(notNullValue()));
-		assertThat(message.getBody(), messageMatcher);
+		assertThat(message, new FeatureMatcher<Message, String>(messageMatcher, "receive a message", "body") {
+			@Override
+			protected String featureValueOf(Message message) {
+				return message.getBody();
+			}
+		});
 	}
 
 }
