@@ -1,6 +1,5 @@
 package com.github.yujiorama.auctionsinper;
 
-import org.GNOME.Accessibility.Application;
 import org.junit.Before;
 import org.junit.Test;
 
