@@ -62,6 +62,23 @@ public class SniperTableModelTest {
 		assertRowMatchesSnapshot(0, joining);
 	}
 	
+	@Test
+	public void holds_snper_in_addtion_order() {
+		context.checking(new Expectations(){{
+			ignoring(listener);
+		}});
+		
+		model.addSniper(SniperSnapshot.joining("aaa"));
+		model.addSniper(SniperSnapshot.joining("bbb"));
+		
+		assertEquals("aaa", cellValue(0, Column.ITEM_IDENTIFIER));
+		assertEquals("bbb", cellValue(1, Column.ITEM_IDENTIFIER));
+	}
+	
+	private Object cellValue(int rowIndex, Column col) {
+		return model.getValueAt(rowIndex, col.ordinal());
+	}
+
 	private void assertRowMatchesSnapshot(int row, SniperSnapshot snapshot) {
 		assertEquals(model.getValueAt(row, Column.ITEM_IDENTIFIER.ordinal()), snapshot.itemId);
 		assertEquals(model.getValueAt(row, Column.LAST_PRICE.ordinal()), snapshot.lastPrice);
