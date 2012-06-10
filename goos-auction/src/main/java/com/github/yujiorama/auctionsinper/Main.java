@@ -2,6 +2,9 @@ package com.github.yujiorama.auctionsinper;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -21,7 +24,7 @@ public class Main {
 
 	private final SniperTableModel sniperTableModel = new SniperTableModel();
 	private MainWindow ui;
-	@SuppressWarnings("unused") private Chat notToBeGCd;
+	@SuppressWarnings("unused") private List<Chat> notToBeGCd = new ArrayList<Chat>();
 	
 	public Main() throws Exception {
 		SwingUtilities.invokeAndWait(new Runnable() {
@@ -34,14 +37,18 @@ public class Main {
 	
 	public static void main(String ... args) throws Exception {
 		Main main = new Main();
-		main.joinAuction(connection(args[0], args[1], args[2]), args[3]);
+		XMPPConnection connection = connection(args[0], args[1], args[2]);
+		for (int i = 3; i < args.length; i++) {
+			main.joinAuction(connection, args[i]);
+		}
 	}
 
-	private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+	private void joinAuction(XMPPConnection connection, String itemId) throws Exception {
 		disconnectWhenUIClosed(connection);
+		safelyAddItemToModel(itemId);
 		final Chat aChat = connection.getChatManager().createChat(auctionId(itemId, connection), null);
 		
-		this.notToBeGCd = aChat;
+		this.notToBeGCd.add(aChat);
 		Auction auction = new XMPPAuction(aChat);
 		aChat.addMessageListener(
 			new AuctionMessageTranslator(
@@ -61,6 +68,15 @@ public class Main {
 		});
 	}
 
+	private void safelyAddItemToModel(final String itemId) throws Exception {
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				sniperTableModel.addSniper(SniperSnapshot.joining(itemId));
+			}
+		});
+	}
+	
 	private String auctionId(String itemId, XMPPConnection connection) {
 		return String.format(AUCITON_ID_FORMAT, itemId, connection.getServiceName(), AUCTION_RESOURCE);
 	}

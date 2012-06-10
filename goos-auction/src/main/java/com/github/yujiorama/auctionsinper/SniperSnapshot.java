@@ -90,4 +90,8 @@ public class SniperSnapshot {
 		return builder.toString();
 	}
 
+	public boolean isForSameItemAs(SniperSnapshot aSnapshot) {
+		return itemId.equals(aSnapshot.itemId);
+	}
+
 }
