@@ -1,6 +1,6 @@
 package com.github.yujiorama.auctionsinper;
 
 public enum AuctionStatus {
-	JOINING, LOST, BIDDING, WON, WINNING
+	JOINNING, LOST, BIDDING, WON, WINNING
 
 }

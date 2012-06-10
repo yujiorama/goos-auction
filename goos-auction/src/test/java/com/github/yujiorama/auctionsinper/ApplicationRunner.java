@@ -31,7 +31,7 @@ public class ApplicationRunner {
 		driver = new AuctionSniperDriver(1000);
 		driver.hasTitle(MainWindow.APPLICATION_NAME);
 		driver.hasColumnTitles();
-		driver.showSniperStatus(AuctionStatus.JOINING);
+		driver.showSniperStatus(AuctionStatus.JOINNING);
 		itemId = "";
 	}
 	
