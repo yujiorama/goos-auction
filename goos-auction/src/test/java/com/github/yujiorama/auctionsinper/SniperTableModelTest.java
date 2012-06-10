@@ -75,6 +75,21 @@ public class SniperTableModelTest {
 		assertEquals("bbb", cellValue(1, Column.ITEM_IDENTIFIER));
 	}
 	
+	@Test
+	public void update_collect_row_for_sniper() {
+		SniperSnapshot joinning = SniperSnapshot.joining("aaa");
+		SniperSnapshot bidding = joinning.bidding(100, 100);
+		context.checking(new Expectations(){{
+			allowing(listener).tableChanged(with(anyInsertionEvent()));
+			oneOf(listener).tableChanged(with(aChangeInRow(0)));
+		}});
+		model.addSniper(joinning);
+		model.addSniper(SniperSnapshot.joining("bbb"));
+		
+		model.sniperStatusChanged(bidding);
+		assertRowMatchesSnapshot(0, bidding);
+	}
+	
 	private Object cellValue(int rowIndex, Column col) {
 		return model.getValueAt(rowIndex, col.ordinal());
 	}
