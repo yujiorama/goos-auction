@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.objogate.exception.Defect;
+
 public class SniperTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
@@ -38,13 +40,19 @@ public class SniperTableModel extends AbstractTableModel {
 	}
 
 	public void sniperStatusChanged(SniperSnapshot newSnapshot) {
+		int i = rowMatching(newSnapshot);
+		sniperSnapshots.set(i, newSnapshot);
+		fireTableRowsUpdated(i, i);
+	}
+	
+	private int rowMatching(SniperSnapshot newSnapshot) {
 		for (int i = 0; i < sniperSnapshots.size(); i++) {
-			SniperSnapshot shot = sniperSnapshots.get(i);
-			if (newSnapshot.itemId.equals(shot.itemId)) {
-				sniperSnapshots.set(i, newSnapshot);
-				fireTableRowsUpdated(i, i);
+			if (newSnapshot.isForSameItemAs(sniperSnapshots.get(i))) {
+				return i;
 			}
 		}
+		
+		throw new Defect("cannot find match for "+ newSnapshot);
 	}
 	
 	public static String textFor(SniperState state) {
